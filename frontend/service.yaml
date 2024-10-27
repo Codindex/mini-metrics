@@ -5,6 +5,7 @@ metadata:
 spec:
   selector:
     app: mini-metrics
+    tier: frontend
   type: ClusterIP
   ports:
     - protocol: TCP

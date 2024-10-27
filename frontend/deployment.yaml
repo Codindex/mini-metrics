@@ -7,14 +7,25 @@ spec:
   selector:
     matchLabels:
       app: mini-metrics
+      tier: frontend
+      track: stable
   template:
     metadata:
       labels:
         app: mini-metrics
+        tier: frontend
+        track: stable
     spec:
       containers:
         - name: mini-metrics
           image: mini-metrics-image
           imagePullPolicy: Never
+          resources:
+            # requests:
+            #   memory: "64Mi"
+            #   cpu: "250m"
+            limits:
+              memory: "64Mi"
+              cpu: "250m"
           ports:
             - containerPort: 3000
