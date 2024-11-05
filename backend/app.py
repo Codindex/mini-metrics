@@ -5,11 +5,6 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello Cluster admins'
 
-@app.route('/add')
-def add():
-    # return str(3 + 4)
-    return jsonify({"result": str(3+4)})
-
 @app.route('/api/addition')
 def get_addition():
     a = int(request.args.get('a', 0))
