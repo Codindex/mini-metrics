@@ -70,3 +70,25 @@ spec:
                 name: back-mini-metrics-service
                 port:
                   number: 80
+```
+
+# Deployment Configuration
+The Deployment resource ensures that two replicas of the application are running.
+
+# Service Configuration
+The Service resource exposes the backend application within the cluster.
+
+# Getting Started
+1) Clone the repository.
+2) Ensure you have Docker and Kubernetes (Minikube) installed.
+3) Make sure you're in the right directory before building 
+4) Build the Docker image:
+docker build -t mini-metrics-backend-image .
+minikube image load mini-metrics-backend-image
+
+5) Apply the Kubernetes configurations:
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
+
+6)Access the application through the Ingress host defined in your configuration.
