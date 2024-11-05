@@ -91,4 +91,4 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 kubectl apply -f ingress.yaml
 
-6)Access the application through the Ingress host defined in your configuration.
+6) Access the application through the Ingress host defined in your configuration.
