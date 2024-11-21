@@ -22,7 +22,7 @@ model User {
 
 model Hour {
   id        Int      @id @default(autoincrement())
-  name      String
+  hour      String
   createdAt DateTime @default(now())
 }
 
