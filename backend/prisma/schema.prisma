@@ -28,6 +28,6 @@ model Hour {
 
 model Formula {
   id        Int      @id @default(autoincrement())
-  name      String
+  formula   String
   createdAt DateTime @default(now())
 }
