@@ -29,3 +29,9 @@ spec:
               cpu: "250m"
           ports:
             - containerPort: 3000
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: mini-metrics-backend-url
+                key: backend-url
