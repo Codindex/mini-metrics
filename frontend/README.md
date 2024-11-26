@@ -72,3 +72,7 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 - MySQL Operator
 - MySQL cluster
 - The database schema and tables
+
+10. Build an image of your app
+11. Run the image of your app
+12. Perform Prisma migration
