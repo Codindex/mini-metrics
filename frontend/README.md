@@ -48,4 +48,20 @@ Create a file mysql_credentials.yaml and apply it to the cluster on installation
 To check wether the credentials have been well configured run the command `helm get manifest mycluster`
 Create a new user named "Api" in the MySQL cluster called mycluster
 Grant this new user the right privileges to access and manipulate the db
-Create a secret url and eploy it on kubernetees
+- Create a secret url and deploy it on kubernetes
+`kubectl create secret generic mini-metrics-backend-url --from-literal=DATABASE_URL='your_env_database_url'`
+- Modify the deployment file:
+```
+spec:
+  template:
+    ...
+    spec:
+      containers:
+        - ...
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: mini-metrics-backend-url
+                key: backend-url
+```
