@@ -74,6 +74,7 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 - The database schema and tables
 
 10. Build an image of your app
+`& minikube -p minikube docker-env --shell powershell | Invoke-Expression`
 `docker build -t mini-metrics-image .`
 
 11. Perform Prisma migration
