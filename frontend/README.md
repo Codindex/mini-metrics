@@ -74,5 +74,14 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 - The database schema and tables
 
 10. Build an image of your app
-11. Run the image of your app
-12. Perform Prisma migration
+`docker build -t mini-metrics-image .`
+
+11. Perform Prisma migration
+- Add a db schema on kubernetes cluster with the same name that is used on local tests
+- Modify your environment variable to point your kubernetes mysql cluster
+- `prisma migrate deploy`
+
+12. Run the image of your app
+- kubectl apply -f deployment.yaml
+- kubectl apply -f service.yaml
+- kubectl apply -f ingress.yaml
