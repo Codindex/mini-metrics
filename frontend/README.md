@@ -40,11 +40,11 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 
 ### DATABASE MySQL
 
-Create a DataBase schema on MySQL db_metrics
+Create a DataBase schema on MySQL: `db_metrics`
 Create tables on that schema that you name user, hour and formula
-Configure the file .env by replacing the values the database name, user name, its password, the connection's name, its port and the schema's name
-Test the API routes with Postman with the POST request and using the link localhost:3000/api/formula, to populate the db with a dummy data containing a fomula's value and the date and time of its creation
-Create a file mysql_credentials.yaml and apply it to the cluster using the command helm install mycluster.....???
-To check wether the credentials have been well configured run the command helm get manifest mycluster
-Create a new user in the MySQL cluster called mycluster
+Configure the file `.env` by replacing the values the database name, user name, its password, the connection's name, its port and the schema's name
+Test the API routes with Postman with the POST request and using the link `localhost:3000/api/formula`, to populate the db with a dummy data containing a fomula's value and the date and time of its creation
+Create a file mysql_credentials.yaml and apply it to the cluster on installation using the command `helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml`
+To check wether the credentials have been well configured run the command `helm get manifest mycluster`
+Create a new user named "Api" in the MySQL cluster called mycluster
 Grant this new user the right privileges to access and manipulate the db
