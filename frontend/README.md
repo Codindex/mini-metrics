@@ -40,28 +40,35 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 
 ### DATABASE MySQL
 
-Create a DataBase schema on MySQL: `db_metrics`
-Create tables on that schema that you name user, hour and formula
-Configure the file `.env` by replacing the values the database name, user name, its password, the connection's name, its port and the schema's name
-Test the API routes with Postman with the POST request and using the link `localhost:3000/api/formula`, to populate the db with a dummy data containing a fomula's value and the date and time of its creation
-Create a file mysql_credentials.yaml and apply it to the cluster on installation using the command `helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml`
-To check wether the credentials have been well configured run the command `helm get manifest mycluster`
-Create a new user named "Api" in the MySQL cluster called mycluster
-Grant this new user the right privileges to access and manipulate the db
-- Create a secret url and deploy it on kubernetes
-`kubectl create secret generic mini-metrics-backend-url --from-literal=DATABASE_URL='your_env_database_url'`
-- Modify the deployment file:
-```
-spec:
-  template:
-    ...
-    spec:
-      containers:
-        - ...
-          env:
-          - name: DATABASE_URL
-            valueFrom:
-              secretKeyRef:
-                name: mini-metrics-backend-url
-                key: backend-url
-```
+1. Create the Database Schema by setting up a MySQL database schema named db_metrics
+
+2. Create the Tables within the schema, name them user, hour, and formula.
+
+3. Configure Environment Variables by updating the .env file with the following values:
+
+- Database name
+- Username
+- Password
+- Connection name
+- Port
+- Schema name
+
+4. Test API Routes:
+   Use Postman to test the API routes by sending a POST request to localhost:3000/api/formula to populate the database with dummy data, including a formula value and its creation date and time.
+
+5. Set Up MySQL Credentials in Kubernetes by creating a mysql_credentials.yaml file. Apply it to the cluster during installation using the following command:
+   helm install mycluster mysql-operator/mysql-innodbcluster --set tls.useSelfSigned=true --values mysql_credentials.yaml
+
+6. Verify Credentials by running the following command:
+   helm get manifest mycluster
+
+7. Create a new user named Api in the MySQL cluster mycluster, and grant this user the necessary privileges to access and manipulate the database.
+
+8. Deploy a Secret URL in Kubernetes by creating a secret URL and deploying it to your Kubernetes cluster.
+
+9. Deployment Overview:
+   At this point, you should have the following components deployed:
+
+- MySQL Operator
+- MySQL cluster
+- The database schema and tables
