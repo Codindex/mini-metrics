@@ -15,9 +15,9 @@ model Formula {
   formula   String
   createdAt DateTime @default(now())
 
-  beginAt String
-  endAt String
-  period String
+  beginAt String?
+  endAt   String?
+  period  String?
 
   results Result[]
 }
@@ -46,6 +46,7 @@ model User {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
+  password  String
   createdAt DateTime @default(now())
 
   formulas Formula[]
