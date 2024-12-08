@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,6 +23,14 @@ export default function SignUp() {
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 p-8 bg-gray-100 text-gray-800">
       <h1 className="text-4xl font-bold">Sign Up for Mini-Metrics</h1>
       <div className="w-full max-w-sm">
+        <label className="block mb-2 text-sm font-medium">Username:</label>
+            <input
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4"
+            placeholder="Enter your username"
+            />
         <label className="block mb-2 text-sm font-medium">Email:</label>
         <input
           type="email"
