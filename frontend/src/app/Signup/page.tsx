@@ -16,7 +16,7 @@ export default function SignUp() {
     }
     alert(`Signing up with Email: ${email}`);
     //Add sign-up logic here (e.g., API call)
-    router.push("/Login"); //Redirect to Login page after sign up
+    router.push("/Formulas"); //Redirect to Login page after sign up
   };
 
   return (
