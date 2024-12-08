@@ -15,7 +15,7 @@ export default function SignUp() {
     }
     alert(`Signing up with Email: ${email}`);
     //Add sign-up logic here (e.g., API call)
-    router.push("/Login"); //Redirect to Login page after sign up
+    router.push("/"); //Redirect to Login page after sign up
   };
 
   return (
@@ -59,7 +59,7 @@ export default function SignUp() {
               onClick={() => router.push("/Login")}
               className="text-blue-600 hover:underline"
             >
-              Sign In
+              Log In
             </button>
           </p>
         </div>
