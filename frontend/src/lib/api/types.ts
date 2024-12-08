@@ -1,3 +1,3 @@
 import { Formula } from "@prisma/client";
 
-export type RequestFormula = Pick<Formula, "formula">;
+export type RequestFormula = Omit<Formula, "id" | "authorId" | "createdAt">;
