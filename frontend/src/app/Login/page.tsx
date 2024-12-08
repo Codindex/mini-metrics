@@ -80,7 +80,7 @@ export default function Home() {
           <p className="text-sm">
             Don't have an account?{" "}
             <button
-              onClick={() => router.push("/signup")}
+              onClick={() => router.push("/Signup")}
               className="text-blue-600 hover:underline"
             >
               Sign Up
