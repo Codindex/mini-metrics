@@ -1,24 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Chart, Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function FormulasPage() {
-  const [formulas, setFormulas] = useState<string[]>([
-    "a + b",
-    "a - b",
-    "a * b",
-    "a / b",
-    
-  ]); // List of existing formulas
-  const [newFormula, setNewFormula] = useState<string>(""); // State for new formula
-  const [graphData, setGraphData] = useState<number[]>([]); // Data for graph display
-  const [appliedFormula, setAppliedFormula] = useState<string>(""); // Currently applied formula
+  const [formulas, setFormulas] = useState<string[]>(["a + b", "a - b"]);
+  const [newFormula, setNewFormula] = useState<string>("");
+  const [appliedFormula, setAppliedFormula] = useState<string>("a + b");
+  const [graphData, setGraphData] = useState<number[]>([]);
+  const [labels, setLabels] = useState<number[]>([]);
 
-  // Handle new formula input
-  const handleNewFormulaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewFormula(e.target.value);
+  // Generate dummy data for graph on formula apply
+  const applyFormula = (formula: string) => {
+    setAppliedFormula(formula);
+    const dummyData = Array.from({ length: 10 }, () => Math.random() * 10);
+    const timeLabels = Array.from({ length: 10 }, (_, i) => i * 5); // Time in minutes
+    setGraphData(dummyData);
+    setLabels(timeLabels);
   };
 
-  // Add new formula to the list
   const addNewFormula = () => {
     if (newFormula.trim()) {
       setFormulas((prev) => [...prev, newFormula]);
@@ -26,17 +46,51 @@ export default function FormulasPage() {
     }
   };
 
-  // Apply formula and generate dummy graph data
-  const applyFormula = (formula: string) => {
-    setAppliedFormula(formula);
-    // Generate dummy data for the graph
-    const dummyData = Array.from({ length: 10 }, (_, i) => i + Math.random() * 10);
-    setGraphData(dummyData);
+  // Data for Chart.js
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: `Graph for: ${appliedFormula}`,
+        data: graphData,
+        fill: false,
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Dynamic Formula Graph",
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Time (minutes)",
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Value",
+        },
+      },
+    },
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800 p-6">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6">Formula Dashboard</h1>
+      <h1 className="text-3xl font-bold text-blue-600 mb-6">Formulas Dashboard</h1>
 
       {/* List of Existing Formulas */}
       <div className="w-full max-w-lg mb-6">
@@ -58,12 +112,12 @@ export default function FormulasPage() {
 
       {/* Create New Formula */}
       <div className="w-full max-w-lg mb-6">
-        <h2 className="text-xl font-semibold mb-4">Create Your Own Formula</h2>
+        <h2 className="text-xl font-semibold mb-4">Create a new Formula</h2>
         <div className="flex space-x-4">
           <input
             type="text"
             value={newFormula}
-            onChange={handleNewFormulaChange}
+            onChange={(e) => setNewFormula(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md shadow-sm"
             placeholder="Enter a formula (e.g., x + y)"
           />
@@ -82,18 +136,8 @@ export default function FormulasPage() {
           <h2 className="text-xl font-semibold mb-4">
             Graph for: <span className="text-blue-600">{appliedFormula}</span>
           </h2>
-          <div className="w-full h-64 bg-white shadow-md rounded-md p-4">
-            {/* Dummy Graph using Bars */}
-            <div className="flex items-end h-full space-x-2">
-              {graphData.map((value, index) => (
-                <div
-                  key={index}
-                  style={{ height: `${value * 5}px` }}
-                  className="w-4 bg-blue-600"
-                  title={`Value: ${value.toFixed(2)}`}
-                ></div>
-              ))}
-            </div>
+          <div className="w-full bg-white shadow-md rounded-md p-4">
+            <Line data={chartData} options={chartOptions} />
           </div>
         </div>
       )}
