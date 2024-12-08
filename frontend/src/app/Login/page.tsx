@@ -16,6 +16,7 @@ export default function Home() {
     if (username === "admin" && password === "password") {
       setIsAuthenticated(true);
       alert("Authentication successful!");
+      router.push("/Formulas"); //Redirect to Formulas page after sign up
     } else {
       alert("Invalid credentials!");
     }
