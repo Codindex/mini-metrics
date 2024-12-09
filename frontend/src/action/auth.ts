@@ -3,10 +3,11 @@
 import bcrypt from "bcrypt";
 
 import prisma from "@/lib/db/client";
-import { SignupFormSchema } from "@/lib/definitions";
+import { LoginFormSchema, SignupFormSchema } from "@/lib/definitions";
 import { createSession } from "@/lib/session";
-import type { SignupInput } from "@/lib/form/definitions";
+import type { LoginInput, SignupInput } from "@/lib/form/definitions";
 import { redirect } from "next/navigation";
+import { string } from "zod";
 
 export async function signUp(signupForm: SignupInput) {
   // const signupForm: SignupInput = await request.json();
@@ -31,4 +32,35 @@ export async function signUp(signupForm: SignupInput) {
   await createSession(user.id.toString());
 
   redirect("/Formulas");
+}
+
+export async function login(loginForm: LoginInput) {
+  // const loginForm: LoginInput = await request.json();
+
+  // Validation
+  const validatedFields = LoginFormSchema.safeParse(loginForm);
+
+  if (!validatedFields.success) return validatedFields.error.flatten().fieldErrors;
+
+  // Auth
+
+  const user = await prisma.user.findUnique({
+    where:{
+      email: loginForm.email, 
+    }
+  });
+
+  if(user === null ){ // verify that user exists within the db 
+    return null;
+  }
+  const verified= await bcrypt.compare(loginForm.password, user.password);
+  if(verified){
+    // Session
+    await createSession(user.id.toString());
+
+    redirect("/Formulas");
+  }
+  else{
+    return null;
+  }
 }

@@ -5,7 +5,7 @@ export type SignupInput = {
   confirmPassword: string;
 }
 
-export type SigninInput = {
+export type LoginInput = {
   email: string;
   password: string;
 }

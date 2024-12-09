@@ -2,25 +2,42 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // For navigation
+import { LoginFormSchema } from "@/lib/definitions";
+import { FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from "@/action/auth";
+import { LoginInput } from "@/lib/form/definitions";
 
 export default function Login() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Manage authentication state
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formula, setFormula] = useState(""); // Current formula
   const formulas = ["cars_passed / time", "total_cars * 2", "avg_speed / cars"]; // Predefined formulas
   const router = useRouter(); // Initialize router
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(LoginFormSchema),
+  });
+
+  const onLogin = (data: FieldValues) => {
+    login(data as LoginInput);
+  }
+
   // Handle authentication
-  const handleAuth = () => {
-    if (username === "admin" && password === "password") {
-      setIsAuthenticated(true);
-      alert("Authentication successful!");
-      router.push("/Formulas"); //Redirect to Formulas page after sign up
-    } else {
-      alert("Invalid credentials!");
-    }
-  };
+  // const handleAuth = () => {
+  //   if (email === "admin@hotmail.com" && password === "password") {
+  //     setIsAuthenticated(true);
+  //     alert("Authentication successful!");
+  //     router.push("/Formulas"); //Redirect to Formulas page after sign up
+  //   } else {
+  //     alert("Invalid credentials!");
+  //   }
+  // };
 
   // Handle formula changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,49 +62,54 @@ export default function Login() {
       {!isAuthenticated && (
         <div className="w-full max-w-md bg-white text-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">🔒 User Authentication</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="username">
-              Username:
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter your username"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1" htmlFor="password">
-              Password:
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter your password"
-            />
-          </div>
-          <button
-            onClick={handleAuth}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition"
-          >
-            Log In
-          </button>
-          <div className="mt-4 text-center">
-          <p className="text-sm">
-            Don't have an account?{" "}
+          <form onSubmit={handleSubmit(onLogin)}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1" htmlFor="email">
+                Email:
+              </label>
+              <input
+                id="email"
+                type="text"
+                //value={email}
+                //onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                placeholder="Enter your email"
+                {...register("email")}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1" htmlFor="password">
+                Password:
+              </label>
+              <input
+                id="password"
+                type="password"
+                // value={password}
+                // onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                placeholder="Enter your password"
+                {...register("password")}
+              />
+            </div>
             <button
-              onClick={() => router.push("/Signup")}
-              className="text-blue-600 hover:underline"
+              type="submit"
+              //onClick={handleAuth}
+              className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition"
             >
-              Sign Up
+              Log In
             </button>
-          </p>
-        </div>
+            <div className="mt-4 text-center">
+            <p className="text-sm">
+              Don't have an account?{" "}
+              <button
+                onClick={() => router.push("/Signup")}
+                className="text-blue-600 hover:underline"
+              >
+                Sign Up
+              </button>
+            </p>
+          </div>
+        </form>
         </div>
       )}
 
