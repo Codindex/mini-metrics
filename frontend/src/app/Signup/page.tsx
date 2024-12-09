@@ -53,7 +53,7 @@ export default function SignUp() {
             type="username"
             // value={username}
             // onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4 text-black"
             placeholder="Enter your username"
             {...register("username")}
           />
@@ -63,7 +63,7 @@ export default function SignUp() {
             type="email"
             // value={email}
             // onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4 text-black"
             placeholder="Enter your email"
             {...register("email")}
           />
@@ -73,7 +73,7 @@ export default function SignUp() {
             type="password"
             // value={password}
             // onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4 text-black"
             placeholder="Enter your password"
             {...register("password")}
           />
@@ -83,7 +83,7 @@ export default function SignUp() {
             type="password"
             // value={confirmPassword}
             // onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4 text-black"
             placeholder="Confirm your password"
             {...register("confirmPassword")}
           />
