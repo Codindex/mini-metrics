@@ -9,13 +9,13 @@
 
 */
 -- AlterTable
-ALTER TABLE `formula` ADD COLUMN `authorId` INTEGER NOT NULL,
+ALTER TABLE `Formula` ADD COLUMN `authorId` INTEGER NOT NULL,
     ADD COLUMN `beginAt` VARCHAR(191) NOT NULL,
     ADD COLUMN `endAt` VARCHAR(191) NOT NULL,
     ADD COLUMN `period` VARCHAR(191) NOT NULL;
 
 -- DropTable
-DROP TABLE `hour`;
+DROP TABLE `Hour`;
 
 -- CreateTable
 CREATE TABLE `Result` (
