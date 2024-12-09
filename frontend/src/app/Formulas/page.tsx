@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Chart, Line } from "react-chartjs-2";
+import { useState } from "react";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -123,7 +123,7 @@ export default function FormulasPage() {
           />
           <button
             onClick={addNewFormula}
-            className="px-4 py-2 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition"
           >
             Add
           </button>
