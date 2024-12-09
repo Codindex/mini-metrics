@@ -15,8 +15,8 @@ export const SignupFormSchema = z.object({
       message: 'Contain at least one special character.',
     })
     .trim(),
-  confirm: z.string()
-}).refine(({ password, confirm }) => password === confirm, {
+  confirmPassword: z.string()
+}).refine(({ password, confirmPassword }) => password === confirmPassword, {
   message: "The confirmation password have to be the same as the password field",
 });
 
