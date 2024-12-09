@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { empty } from "@prisma/client/runtime/library";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -10,17 +11,23 @@ export default function SignUp() {
   const router = useRouter();
 
   const handleSignUp = () => {
+    // if (password is empty) {
+    //     alert("Passwords do not match!");
+    //     router.push("/Signup");
+    //   }
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
-      return;
+      router.push("/Signup");
     }
-    alert(`Signing up with Email: ${email}`);
-    //Add sign-up logic here (e.g., API call)
-    router.push("/Formulas"); //Redirect to Login page after sign up
+    else {
+        alert(`Signing up with Email: ${email}`);
+        //Add sign-up logic here (e.g., API call)
+        router.push("/Formulas"); //Redirect to Login page after sign up
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-6 p-8 bg-gray-100 text-gray-800">
+    <div className="min-h-screen flex flex-col items-center justify-center gap-8 p-8 bg-gradient-to-br from-indigo-500 to-teal-500 text-white font-sans">
       <h1 className="text-4xl font-bold">Sign Up for Mini-Metrics</h1>
       <div className="w-full max-w-sm">
         <label className="block mb-2 text-sm font-medium">Username:</label>
@@ -57,7 +64,7 @@ export default function SignUp() {
         />
         <button
           onClick={handleSignUp}
-          className="w-full bg-green-600 text-white py-2 rounded-md shadow-md hover:bg-green-500"
+          className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition"
         >
           Sign Up
         </button>
@@ -73,6 +80,10 @@ export default function SignUp() {
           </p>
         </div>
       </div>
+      {/* Footer */}
+      <footer className="text-center text-sm mt-12 opacity-75">
+        © 2024 Mini-Metrics • Built for Light Traffic Monitoring in Minikube
+      </footer>
     </div>
   );
 }

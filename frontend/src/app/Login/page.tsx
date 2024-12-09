@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // For navigation
 
-export default function Home() {
+export default function Login() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Manage authentication state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -75,7 +75,7 @@ export default function Home() {
             onClick={handleAuth}
             className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition"
           >
-            Login
+            Log In
           </button>
           <div className="mt-4 text-center">
           <p className="text-sm">

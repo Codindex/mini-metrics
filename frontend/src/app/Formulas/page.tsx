@@ -90,7 +90,7 @@ export default function FormulasPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800 p-6">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6">Formulas Dashboard</h1>
+      <h1 className="text-3xl font-bold text-indigo-600 mb-6">Formulas Dashboard</h1>
 
       {/* List of Existing Formulas */}
       <div className="w-full max-w-lg mb-6">
@@ -101,7 +101,7 @@ export default function FormulasPage() {
               <span>{formula}</span>
               <button
                 onClick={() => applyFormula(formula)}
-                className="text-blue-600 hover:underline"
+                className="font-bold text-indigo-600 hover:underline"
               >
                 Apply
               </button>
@@ -123,7 +123,7 @@ export default function FormulasPage() {
           />
           <button
             onClick={addNewFormula}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-500"
+            className="px-4 py-2 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition"
           >
             Add
           </button>
@@ -141,6 +141,10 @@ export default function FormulasPage() {
           </div>
         </div>
       )}
+      {/* Footer */}
+      <footer className="text-center text-sm mt-12 opacity-75">
+        © 2024 Mini-Metrics • Built for Light Traffic Monitoring in Minikube
+      </footer>
     </div>
   );
 }
