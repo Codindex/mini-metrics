@@ -2,7 +2,7 @@ export type SignupInput = {
   username: string;
   email: string;
   password: string;
-  confirm: string;
+  confirmPassword: string;
 }
 
 export type SigninInput = {
