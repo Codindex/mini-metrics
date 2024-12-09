@@ -18,6 +18,7 @@ export const SignupFormSchema = z.object({
   confirmPassword: z.string()
 }).refine(({ password, confirmPassword }) => password === confirmPassword, {
   message: "The confirmation password have to be the same as the password field",
+  path: ["confirmPassword"]
 });
 
 export const SigninFormSchema = z.object({
