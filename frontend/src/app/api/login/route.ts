@@ -1,15 +1,15 @@
 import bcrypt from "bcrypt";
 
 import prisma from "@/lib/db/client";
-import { SigninFormSchema } from "@/lib/definitions";
+import { LoginFormSchema } from "@/lib/definitions";
 import { createSession, deleteSession, getUserId } from "@/lib/session";
-import type { SigninInput } from "@/lib/form/definitions";
+import type { LoginInput } from "@/lib/form/definitions";
 
 export async function POST(request: Request) {
-  const loginInput: SigninInput = await request.json();
+  const loginInput: LoginInput = await request.json();
 
   // Validation
-  const validatedFields = SigninFormSchema.safeParse(loginInput);
+  const validatedFields = LoginFormSchema.safeParse(loginInput);
 
   if (!validatedFields.success) {
     return Response.json({
