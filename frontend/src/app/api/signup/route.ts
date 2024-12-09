@@ -30,11 +30,11 @@ export async function POST(request: Request) {
     },
   })
 
-  if (!user) {
-    return {
-      message: "An error occured while creating your account."
-    }
-  }
+  // if (!user) {
+  //   return {
+  //     message: "An error occured while creating your account."
+  //   }
+  // }
 
   // Session
   await createSession(user.id.toString())
