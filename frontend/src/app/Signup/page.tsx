@@ -30,12 +30,12 @@ export default function SignUp() {
     <div className="min-h-screen flex flex-col items-center justify-center gap-8 p-8 bg-gradient-to-br from-indigo-500 to-teal-500 text-white font-sans">
       <h1 className="text-4xl font-bold">Sign Up for Mini-Metrics</h1>
       <div className="w-full max-w-sm">
-        <label className="block mb-2 text-sm font-medium">Username:</label>
-            <input
+        <label className="block mb-2 text-sm font-medium mb-1">Username:</label>
+            <input 
             type="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm mb-4 text-black"
             placeholder="Enter your username"
             />
         <label className="block mb-2 text-sm font-medium">Email:</label>
