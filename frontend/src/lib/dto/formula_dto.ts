@@ -5,12 +5,12 @@ import type { Formula } from "@prisma/client";
 
 type NewFormula = {
 	formula: string;
-	id: number;
-	authorId: number;
-	createdAt: undefined;
-	beginAt: string | null;
-	endAt: string | null;
-	period: string | null;
+	// id: undefined;
+	// authorId: undefined;
+	// createdAt: undefined;
+	beginAt: string | undefined;
+	endAt: string | undefined;
+	period: string | undefined;
 }
 
 export async function getFormulaListDTO() {
@@ -45,7 +45,14 @@ export async function createFormulaDTO(formula: NewFormula) {
 	if (!currentUser) return null;
 
 	const newFormula = await prisma.formula.create({
-		data: formula,
+		data: {
+			formula: formula.formula,
+			author: {
+				connect: {
+					id: currentUser.id,
+				},
+			},
+		},
 	});
 
 	return newFormula;
