@@ -86,3 +86,20 @@ export async function deleteFormulaDTO(formulaId: number) {
 
 	return deletedFormula;
 }
+
+export async function getFormulaResultsDTO(formulaId: number) {
+	const currentUser = await getUser();
+	if (!currentUser) return null;
+
+	const formula = await prisma.formula.findUnique({
+		where: {
+			id: formulaId,
+			authorId: currentUser.id,
+		},
+		include: {
+			results: true,
+		},
+	});
+
+	return formula;
+}
