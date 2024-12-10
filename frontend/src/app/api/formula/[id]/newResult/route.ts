@@ -1,4 +1,4 @@
-import { RequestResult } from "@/lib/api/types";
+import type { RequestResult } from "@/lib/api/types";
 import prisma from "@/lib/db/client";
 import { ResultType } from "@prisma/client";
 
