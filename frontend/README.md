@@ -14,6 +14,23 @@ The Metrics Service is a core component of the Light Traffic Monitoring project.
 - Authentication: User-based authentication and session management.
 - Customizable Formulas: Build and use custom or predefined formulas for analysis.
 
+## Prerequisites
+
+Before starting, ensure you have the following installed:
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- Next.js (v13 or higher)
+- Python (with venv support)
+- Docker and Minikube
+- MySQL database
+
+Additionally, install the required libraries:
+
+- react-hook-form
+- zod and @hookform/resolvers/zod
+- chart.js and react-chartjs-2
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -106,37 +123,6 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 - kubectl apply -f ingress.yaml
 
 ### Frontend in Typescript
-
-# Features
-
-User Authentication: Secure login and signup for users.
-Formula Builder: Create and apply custom formulas for traffic data analysis.
-Data Visualization: Generate dynamic graphs for applied formulas.
-Predefined Formulas: Use built-in formulas for quick insights.
-
-# Prerequisites
-
-Node.js: v14 or higher
-npm: v6 or higher
-Next.js: v13 or higher
-React.js
-Libraries:
-react-hook-form
-zod and @hookform/resolvers/zod
-chart.js and react-chartjs-2
-
-# Project Structure
-
-src/
-├── app/
-│ ├── Login/ # Login page for user authentication
-│ │ └── page.tsx # Code for the Login page
-│ ├── Signup/ # Signup page for new user registration
-│ │ └── page.tsx # Code for the Signup page
-│ ├── Formulas/ # Main dashboard for managing and visualizing formulas
-│ │ └── page.tsx # Code for the Formulas page
-├── lib/ # Shared utilities and schemas
-└── styles/ # Global styles and theming
 
 # Setup and Installation
 
@@ -318,23 +304,22 @@ Description: Deletes a formula by its ID.
 
 The application uses zod schemas to validate user inputs for authentication and formula creation. Below are the rules for validation:
 
-# Sign Up Validation
+### Sign Up
 
-Fields:
-username: Required, non-empty string.
-email: Required, must be a valid email format.
-password: Required, minimum length 8 characters.
+- username: Required, non-empty string.
+- email: Required, must be a valid email format.
+- password: Required, minimum length 8 characters.
 
-## Login Validation
+### Login
 
-Fields:
-email: Required, must be a valid email format.
-password: Required, non-empty string.
+- email: Required, must be a valid email format.
+- password: Required, non-empty string.
 
 ## Technologies Used
 
-Backend: Node.js, Next.js API Routes
-ORM: Prisma
-Authentication: bcrypt for password hashing, custom session management
-Validation: zod
-Database: Compatible with any Prisma-supported database (e.g., PostgreSQL, MySQL, SQLite)
+- Backend: Node.js, Next.js API Routes
+- Database: MySQL with Prisma ORM
+- Authentication: bcrypt, session management
+- Frontend: React.js, TypeScript
+- Graphs: Chart.js, react-chartjs-2
+- Validation: zod
