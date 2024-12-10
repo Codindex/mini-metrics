@@ -11,6 +11,13 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { type FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormulaFormSchema } from "@/lib/definitions";
+import type { FormulaInput } from "@/lib/form/definitions";
+// import { createFormulaDTO, getFormulaListDTO, getFormulaResultsDTO } from "@/lib/dto/formula_dto";
+import { createFormulaDTO, getFormulaListDTO } from "@/lib/dto/formula_dto";
+import { Formula } from "@prisma/client";
 
 // Register Chart.js components
 ChartJS.register(
@@ -24,27 +31,61 @@ ChartJS.register(
 );
 
 export default function FormulasPage() {
-  const [formulas, setFormulas] = useState<string[]>(["a + b", "a - b"]);
-  const [newFormula, setNewFormula] = useState<string>("");
+  // const [formulas, setFormulas] = useState<string[]>(["a + b", "a - b"]);
+  const [formulas, setFormulas] = useState<Formula[]>([]);
+  // const [newFormula, setNewFormula] = useState<string>("");
   const [appliedFormula, setAppliedFormula] = useState<string>("a + b");
   const [graphData, setGraphData] = useState<number[]>([]);
   const [labels, setLabels] = useState<number[]>([]);
 
   // Generate dummy data for graph on formula apply
-  const applyFormula = (formula: string) => {
-    setAppliedFormula(formula);
+  const applyFormula = async (formula: Formula) => {
+    setAppliedFormula(formula.formula);
+    
+    // const formulaWithResults = await getFormulaResultsDTO(formula.id);
+    // if (formulaWithResults) {
+    //   const data = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
+    //     const result = JSON.parse(formulaWithResults.results[i].result!.toString()) as number;
+    //     return result;
+    //   });
+    //   let timeLabels = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
+    //     const result = formulaWithResults.results[i].createdAt;
+    //     return result.getTime();
+    //   });
+
+    //   return
+    // }
+
     const dummyData = Array.from({ length: 10 }, () => Math.random() * 10);
     const timeLabels = Array.from({ length: 10 }, (_, i) => i * 5); // Time in minutes
+    
     setGraphData(dummyData);
     setLabels(timeLabels);
   };
 
-  const addNewFormula = () => {
-    if (newFormula.trim()) {
-      setFormulas((prev) => [...prev, newFormula]);
-      setNewFormula("");
+  // const addNewFormula = () => {
+  //   if (newFormula.trim()) {
+  //     setFormulas((prev) => [...prev, newFormula]);
+  //     setNewFormula("");
+  //   }
+  // };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(FormulaFormSchema),
+  });
+
+  const onNewFormula = async (data: FieldValues) => {
+    const formulaInput = data as FormulaInput;
+    const formula = await createFormulaDTO(formulaInput);
+    if (formula) {
+      const formulaList = await getFormulaListDTO()
+      if (formulaList) setFormulas(formulaList)
     }
-  };
+  }
 
   // Data for Chart.js
   const chartData = {
@@ -98,7 +139,7 @@ export default function FormulasPage() {
         <ul className="list-disc pl-5 space-y-2">
           {formulas.map((formula, index) => (
             <li key={index} className="flex justify-between items-center">
-              <span>{formula}</span>
+              <span>{formula.formula}</span>
               <button
                 onClick={() => applyFormula(formula)}
                 className="font-bold text-indigo-600 hover:underline"
@@ -113,21 +154,24 @@ export default function FormulasPage() {
       {/* Create New Formula */}
       <div className="w-full max-w-lg mb-6">
         <h2 className="text-xl font-semibold mb-4">Create a new Formula</h2>
-        <div className="flex space-x-4">
-          <input
-            type="text"
-            value={newFormula}
-            onChange={(e) => setNewFormula(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm"
-            placeholder="Enter a formula (e.g., x + y)"
-          />
-          <button
-            onClick={addNewFormula}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition"
-          >
-            Add
-          </button>
-        </div>
+        <form onSubmit={handleSubmit(onNewFormula)}>
+          <div className="flex space-x-4">
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Enter a formula (e.g., x + y)"
+              {...register("formula")}
+            />
+            <p className="text-red-500">{errors.formula?.message?.toString()}</p>
+            <button
+              type="submit"
+              // onClick={addNewFormula}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition"
+            >
+              Add
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Graph Section */}
