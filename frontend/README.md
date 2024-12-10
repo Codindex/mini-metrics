@@ -110,7 +110,7 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 
 ### Frontend in Typescript
 
-# Setup and Installation
+## Setup and Installation
 
 1. Clone the repository:
    git clone https://github.com/your-repo/mini-metrics-frontend.git
@@ -121,7 +121,7 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
    npm run dev
 4. Visit the application: Open your browser and navigate to http://localhost:3000.
 
-# Key Components
+## Key Components
 
 1. Login Page (src/app/Login/page.tsx)
    Handles user authentication using form validation with react-hook-form and zod.
@@ -134,7 +134,7 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
    Displays real-time graphs using chart.js based on the applied formulas.
    Provides options to add or clear formulas.
 
-# Usage
+## Usage
 
 1. Authentication:
    Navigate to the Login page.
@@ -148,20 +148,20 @@ Link Mysql and prisma using Python: https://prisma-client-py.readthedocs.io/en/s
 3. Customization:
    Modify the formulas array in the Formulas page to add new default formulas.
 
-# Dependencies
+## Dependencies
 
 react-hook-form: For form validation and handling.
 zod: Schema validation for forms.
 chart.js: For rendering dynamic graphs.
 react-chartjs-2: React wrapper for Chart.js.
 
-### API Endpoints
+## API Endpoints
 
-## Authentication
+### Authentication
 
 The application provides APIs for user authentication, including sign-up, login, and logout.
 
-# Sign Up
+#### Sign Up
 
 Endpoint: POST /api/signup
 Description: Registers a new user with a hashed password.
@@ -182,7 +182,7 @@ Description: Registers a new user with a hashed password.
   }
   Error (400): Returns validation errors if input is invalid.
 
-# Login
+#### Login
 
 Endpoint: POST /api/login
 Description: Logs in a user by verifying their email and password.
@@ -198,7 +198,7 @@ Description: Logs in a user by verifying their email and password.
   Error (403): Returns "Wrong credentials" if login fails.
   Error (400): Returns "No user found with this email" if the email does not exist.
 
-# Logout
+#### Logout
 
 Endpoint: DELETE /api/login
 Description: Ends the user's session.
