@@ -1,3 +1,19 @@
+# Kubernetes Light Traffic Monitoring - Metrics Service
+
+The Metrics Service is a core component of the Light Traffic Monitoring project. It handles various calculations, including:
+
+- Counting vehicles during specified time intervals.
+- Capturing license plates from a camera service at a given time.
+- Calculating the optimal route using data from the Intersection and Routes service.
+
+## Features
+
+- Traffic Data Analysis: Calculates metrics such as vehicle count and optimal route suggestions.
+- Database Integration: MySQL backend for storing and querying traffic data and formulas.
+- Dynamic Visualizations: Graphical representation of applied formulas.
+- Authentication: User-based authentication and session management.
+- Customizable Formulas: Build and use custom or predefined formulas for analysis.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
