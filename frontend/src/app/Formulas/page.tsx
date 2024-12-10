@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -16,8 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormulaFormSchema } from "@/lib/definitions";
 import type { FormulaInput } from "@/lib/form/definitions";
 // import { createFormulaDTO, getFormulaListDTO, getFormulaResultsDTO } from "@/lib/dto/formula_dto";
-import { createFormulaDTO, getFormulaListDTO } from "@/lib/dto/formula_dto";
 import { Formula } from "@prisma/client";
+import { createFormula, getFormulaList, getFormulaResults } from "@/action/formula";
 
 // Register Chart.js components
 ChartJS.register(
@@ -34,33 +34,34 @@ export default function FormulasPage() {
   // const [formulas, setFormulas] = useState<string[]>(["a + b", "a - b"]);
   const [formulas, setFormulas] = useState<Formula[]>([]);
   // const [newFormula, setNewFormula] = useState<string>("");
-  const [appliedFormula, setAppliedFormula] = useState<string>("a + b");
+  const [appliedFormula, setAppliedFormula] = useState<string>();
   const [graphData, setGraphData] = useState<number[]>([]);
   const [labels, setLabels] = useState<number[]>([]);
 
   // Generate dummy data for graph on formula apply
-  const applyFormula = async (formula: Formula) => {
-    setAppliedFormula(formula.formula);
+  const applyFormula = async (formulaObj: Formula) => {
+    setAppliedFormula(formulaObj.formula);
     
-    // const formulaWithResults = await getFormulaResultsDTO(formula.id);
-    // if (formulaWithResults) {
-    //   const data = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
-    //     const result = JSON.parse(formulaWithResults.results[i].result!.toString()) as number;
-    //     return result;
-    //   });
-    //   let timeLabels = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
-    //     const result = formulaWithResults.results[i].createdAt;
-    //     return result.getTime();
-    //   });
+    const formulaWithResults = await getFormulaResults(formulaObj.id);
+    if (formulaWithResults) {
+      const data = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
+        const result = JSON.parse(formulaWithResults.results[i].result!.toString()) as number;
+        return result;
+      });
+      const timeLabels = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
+        const result = formulaWithResults.results[i].createdAt;
+        return result.getTime();
+      });
 
-    //   return
-    // }
-
-    const dummyData = Array.from({ length: 10 }, () => Math.random() * 10);
-    const timeLabels = Array.from({ length: 10 }, (_, i) => i * 5); // Time in minutes
-    
-    setGraphData(dummyData);
-    setLabels(timeLabels);
+      setGraphData(data);
+      setLabels(timeLabels);
+    } else {
+      // const dummyData = Array.from({ length: 10 }, () => Math.random() * 10);
+      // const timeLabels = Array.from({ length: 10 }, (_, i) => i * 5); // Time in minutes
+      
+      // setGraphData(dummyData);
+      // setLabels(timeLabels);
+    }
   };
 
   // const addNewFormula = () => {
@@ -80,9 +81,9 @@ export default function FormulasPage() {
 
   const onNewFormula = async (data: FieldValues) => {
     const formulaInput = data as FormulaInput;
-    const formula = await createFormulaDTO(formulaInput);
+    const formula = await createFormula(formulaInput);
     if (formula) {
-      const formulaList = await getFormulaListDTO()
+      const formulaList = await getFormulaList()
       if (formulaList) setFormulas(formulaList)
     }
   }
@@ -128,6 +129,15 @@ export default function FormulasPage() {
       },
     },
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const formulaList = await getFormulaList();
+      if (formulaList) setFormulas(formulaList);
+    }
+    
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800 p-6">

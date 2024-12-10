@@ -3,7 +3,7 @@ import { getUser } from "../dal";
 import prisma from "../db/client";
 import type { Formula } from "@prisma/client";
 
-type NewFormula = {
+export type NewFormula = {
 	formula: string;
 	// id: undefined;
 	// authorId: undefined;
