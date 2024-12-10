@@ -1,16 +1,16 @@
 import "server-only";
 import { getUser } from "../dal";
 import prisma from "../db/client";
-import { Formula } from "@prisma/client";
+import type { Formula } from "@prisma/client";
 
 type NewFormula = {
 	formula: string;
-	id: number;
-	authorId: number;
-	createdAt: undefined;
-	beginAt: string | null;
-	endAt: string | null;
-	period: string | null;
+	// id: undefined;
+	// authorId: undefined;
+	// createdAt: undefined;
+	beginAt: string | undefined;
+	endAt: string | undefined;
+	period: string | undefined;
 }
 
 export async function getFormulaListDTO() {
@@ -45,7 +45,14 @@ export async function createFormulaDTO(formula: NewFormula) {
 	if (!currentUser) return null;
 
 	const newFormula = await prisma.formula.create({
-		data: formula,
+		data: {
+			formula: formula.formula,
+			author: {
+				connect: {
+					id: currentUser.id,
+				},
+			},
+		},
 	});
 
 	return newFormula;
@@ -58,22 +65,41 @@ export async function updateFormulaDTO(formula: Formula) {
 	const updatedFormula = await prisma.formula.update({
 		data: formula,
 		where: {
-			id: formula.id
+			id: formula.id,
+			authorId: currentUser.id,
 		},
 	});
 
 	return updatedFormula;
 }
 
-export async function deletePointDTO(formulaId: number) {
+export async function deleteFormulaDTO(formulaId: number) {
 	const currentUser = await getUser();
 	if (!currentUser) return null;
 
 	const deletedFormula = await prisma.formula.delete({
 		where: {
 			id: formulaId,
+			authorId: currentUser.id,
 		},
 	});
 
 	return deletedFormula;
+}
+
+export async function getFormulaResultsDTO(formulaId: number) {
+	const currentUser = await getUser();
+	if (!currentUser) return null;
+
+	const formula = await prisma.formula.findUnique({
+		where: {
+			id: formulaId,
+			authorId: currentUser.id,
+		},
+		include: {
+			results: true,
+		},
+	});
+
+	return formula;
 }

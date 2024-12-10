@@ -7,7 +7,6 @@ import { LoginFormSchema, SignupFormSchema } from "@/lib/definitions";
 import { createSession } from "@/lib/session";
 import type { LoginInput, SignupInput } from "@/lib/form/definitions";
 import { redirect } from "next/navigation";
-import { string } from "zod";
 
 export async function signUp(signupForm: SignupInput) {
   // const signupForm: SignupInput = await request.json();
