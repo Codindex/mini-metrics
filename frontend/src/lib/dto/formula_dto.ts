@@ -1,7 +1,7 @@
 import "server-only";
 import { getUser } from "../dal";
 import prisma from "../db/client";
-import { Formula } from "@prisma/client";
+import type { Formula } from "@prisma/client";
 
 type NewFormula = {
 	formula: string;
@@ -58,20 +58,22 @@ export async function updateFormulaDTO(formula: Formula) {
 	const updatedFormula = await prisma.formula.update({
 		data: formula,
 		where: {
-			id: formula.id
+			id: formula.id,
+			authorId: currentUser.id,
 		},
 	});
 
 	return updatedFormula;
 }
 
-export async function deletePointDTO(formulaId: number) {
+export async function deleteFormulaDTO(formulaId: number) {
 	const currentUser = await getUser();
 	if (!currentUser) return null;
 
 	const deletedFormula = await prisma.formula.delete({
 		where: {
 			id: formulaId,
+			authorId: currentUser.id,
 		},
 	});
 
