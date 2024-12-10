@@ -10,6 +10,13 @@ export type LoginInput = {
   password: string;
 }
 
+export type FormulaInput = {
+  formula: string;
+  beginAt: string | undefined;
+	endAt: string | undefined;
+	period: string | undefined;
+}
+
 export type ErrorMessage = {
   message: string;
   status: number;

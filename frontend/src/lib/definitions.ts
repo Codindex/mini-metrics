@@ -13,8 +13,7 @@ export const SignupFormSchema = z.object({
     .regex(/[0-9]/, { message: 'Contain at least one number.' })
     .regex(/[^a-zA-Z0-9]/, {
       message: 'Contain at least one special character.',
-    })
-    .trim(),
+    }),
   confirmPassword: z.string()
 }).refine(({ password, confirmPassword }) => password === confirmPassword, {
   message: "The confirmation password have to be the same as the password field",
@@ -25,6 +24,13 @@ export const LoginFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
   password: z
     .string().trim(),
+});
+
+export const FormulaFormSchema = z.object({
+  formula: z
+    .string()
+    .min(3, { message: "A formula has to be at least 3 characters long" })
+    .trim(),
 });
 
 export type SessionPayload = {
