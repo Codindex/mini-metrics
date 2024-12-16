@@ -54,15 +54,20 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } },
 ) {
-  const deletedFormula = await prisma.formula.delete({
+  const updatedFormula = await prisma.formula.update({
     where: {
       id: +params.id,
+    },
+    data: {
+      results: {
+        deleteMany: {},
+      },
     },
   });
 
   return Response.json({
-    message: "Formula erased !",
-    formula: deletedFormula,
+    message: "Results erased !",
+    formula: updatedFormula,
   }, {
     status: 200,
   });
