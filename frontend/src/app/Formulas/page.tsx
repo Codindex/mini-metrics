@@ -15,7 +15,6 @@ import { type FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormulaFormSchema } from "@/lib/definitions";
 import type { FormulaInput } from "@/lib/form/definitions";
-// import { createFormulaDTO, getFormulaListDTO, getFormulaResultsDTO } from "@/lib/dto/formula_dto";
 import { Formula } from "@prisma/client";
 import { createFormula, getFormulaList, getFormulaResults } from "@/action/formula";
 
@@ -39,7 +38,7 @@ export default function FormulasPage() {
   const [graphData, setGraphData] = useState<number[]>([]);
   const [labels, setLabels] = useState<number[]>([]);
 
-  // Generate dummy data for graph on formula apply
+  // Generate dummy data for graph on formula apply, if no results fetched ?
   const applyFormula = async (formulaObj: Formula) => {
     setAppliedFormula(formulaObj.formula);
     
