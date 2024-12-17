@@ -35,6 +35,7 @@ export default function FormulasPage() {
   const [formulas, setFormulas] = useState<Formula[]>([]);
   // const [newFormula, setNewFormula] = useState<string>("");
   const [appliedFormula, setAppliedFormula] = useState<string>();
+  const [begin, setBegin] = useState<Date>();
   const [graphData, setGraphData] = useState<number[]>([]);
   const [labels, setLabels] = useState<number[]>([]);
 
@@ -44,15 +45,20 @@ export default function FormulasPage() {
     
     const formulaWithResults = await getFormulaResults(formulaObj.id);
     if (formulaWithResults) {
+      const resultsSorted = formulaWithResults.results.sort((a, b) =>
+        a.createdAt.getTime() - b.createdAt.getTime()
+      );
+      const beginTime = resultsSorted.length > 0 ? resultsSorted[0].createdAt : undefined;
       const data = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
         const result = JSON.parse(formulaWithResults.results[i].result!.toString()) as number;
         return result;
       });
       const timeLabels = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
         const result = formulaWithResults.results[i].createdAt;
-        return result.getMinutes();
+        return Math.floor((result.getTime() - (beginTime ? beginTime.getTime() : 0))/(1000*60));
       });
 
+      setBegin(beginTime);
       setGraphData(data);
       setLabels(timeLabels);
     } else {
@@ -190,6 +196,15 @@ export default function FormulasPage() {
           <h2 className="text-xl font-semibold mb-4">
             Graph for: <span className="text-blue-600">{appliedFormula}</span>
           </h2>
+          {begin ?
+            <h3>
+              Begin at: <span className="text-blue-600">{begin.toString()}</span>
+            </h3>
+          :
+            <h3>
+              No results yet
+            </h3>
+          }
           <div className="w-full bg-white shadow-md rounded-md p-4">
             <Line data={chartData} options={chartOptions} />
           </div>
