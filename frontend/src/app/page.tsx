@@ -21,13 +21,13 @@ export default function HomePage() {
 
         <div className="flex justify-center space-x-4">
           <button
-            onClick={() => router.push("/Signup")}
+            onClick={() => router.push("/signup")}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-500 transition"
           >
             Sign Up
           </button>
           <button
-            onClick={() => router.push("/Login")}
+            onClick={() => router.push("/login")}
             className="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-200 transition"
           >
             Login

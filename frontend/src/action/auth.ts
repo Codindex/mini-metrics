@@ -30,7 +30,7 @@ export async function signUp(signupForm: SignupInput) {
   // Session
   await createSession(user.id.toString());
 
-  redirect("/Formulas");
+  redirect("/formulas");
 }
 
 export async function login(loginForm: LoginInput) {
@@ -57,7 +57,7 @@ export async function login(loginForm: LoginInput) {
     // Session
     await createSession(user.id.toString());
 
-    redirect("/Formulas");
+    redirect("/formulas");
   }
   else{
     return null;
