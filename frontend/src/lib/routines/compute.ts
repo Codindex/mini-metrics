@@ -1,3 +1,4 @@
+import "server-only";
 import prisma from "../db/client";
 import { fetchAllVideos } from "../api/camera/fetch";
 import { FormulaWithResults } from "../db/formula";
@@ -6,10 +7,21 @@ import { FormulaWithResults } from "../db/formula";
 //   [name: string]: string | string[];
 // }
 
-export async function compute(formula: FormulaWithResults, period: number) {
+export async function compute(formula: FormulaWithResults) {
+  let isFinished = false;
   const lastTime = formula.results.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[-1].createdAt;
+  // Assuming we have periods expressed in minutes
+  const period = formula.period ? +formula.period : 1;
   const time = lastTime;
   time.setMinutes(time.getMinutes() + period);
+  // if (formula.endAt) {
+  //   const endAt = new Date("1970T"+formula.endAt);
+  // }
+  
+  // This assume we test it only on the same day it occurs
+  const endTime = lastTime;
+  endTime.setMinutes(formula.endAt ? new Date(formula.endAt).getMinutes() : new Date().getMinutes());
+  endTime.setHours(formula.endAt ? new Date(formula.endAt).getHours() : new Date().getHours());
   
   let stringLeft = formula.formula;
 
@@ -45,7 +57,13 @@ export async function compute(formula: FormulaWithResults, period: number) {
                 }
               }
             },
+            include: {
+              results: true,
+            }
           });
+          isFinished =
+            lastTime.getTime() + period*60000 > Date.now() ||
+            lastTime.getTime() + period*60000 > endTime.getTime();
         }
         break;
       default:
@@ -58,4 +76,5 @@ export async function compute(formula: FormulaWithResults, period: number) {
     console.log(unread);
     stringLeft = unread;
   }
+  return isFinished;
 }
