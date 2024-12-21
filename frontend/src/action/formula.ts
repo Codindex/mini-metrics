@@ -18,9 +18,15 @@ export async function getFormulaResults(formulaId: number) {
   if (formulaWithResults) {
     let finish = false;
     while (!finish) {
-      finish = await compute(formulaWithResults!);
+      const computation = await compute(formulaWithResults!);
+      finish = computation.finish;
+      formulaWithResults = computation.formula;
+
       formulaWithResults = await getFormulaResultsDTO(formulaId);
+      if (formulaWithResults) console.log(formulaWithResults.results[formulaWithResults.results.length - 1]);
+      console.log(finish);
     }
+    console.log("finish");
   }
   return formulaWithResults;
 }

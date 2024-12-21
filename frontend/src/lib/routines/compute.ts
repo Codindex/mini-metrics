@@ -2,33 +2,91 @@ import "server-only";
 import prisma from "../db/client";
 import { fetchAllVideos } from "../api/camera/fetch";
 import { FormulaWithResults } from "../db/formula";
+import { Time } from "../time";
 
 // type Results = {
 //   [name: string]: string | string[];
 // }
 
+class Computation {
+  finish: boolean;
+  formula: FormulaWithResults | null;
+
+  constructor(finish: boolean, formula: FormulaWithResults | null) {
+    this.finish = finish;
+    this.formula = formula
+  }
+}
+
 export async function compute(formula: FormulaWithResults) {
   let isFinished = false;
-  const lastTime = formula.results.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[-1].createdAt;
+  const start = Time.fromString(formula.beginAt ? formula.beginAt : "0h0");
+  const end = Time.fromString(formula.endAt ? formula.endAt : "23h59");
+  let lastTime;
+  if (formula.results.length > 0) {
+    const lastResult = formula.results.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())[formula.results.length-1];
+    lastTime = new Date(lastResult.createdAt);
+  } else {
+    lastTime = new Date(formula.createdAt);
+  }
+
+  const startOfDay = new Date(lastTime);
+  startOfDay.setHours(start.hours, start.minutes, 0, 0);
+  console.log("Start: "+ startOfDay);
+  
+  const isTooEarly = lastTime.getTime() < startOfDay.getTime();
+  console.log(isTooEarly);
+  if (isTooEarly) {
+    lastTime = new Date(
+      lastTime.getFullYear(),
+      lastTime.getMonth(),
+      lastTime.getDate(),
+      start.hours,
+      start.minutes
+    )
+  }
+  const endOfDay = new Date(lastTime);
+  endOfDay.setHours(end.hours, end.minutes, 0, 0);
+  console.log("End: " + endOfDay);
+  
+  const isTooLate = lastTime.getTime() > endOfDay.getTime();
+  console.log(isTooLate);
+  if (isTooLate) {
+    lastTime = new Date(
+      lastTime.getFullYear(),
+      lastTime.getMonth(),
+      lastTime.getDate()+1,
+      start.hours,
+      start.minutes
+    )
+  }
+  
   // Assuming we have periods expressed in minutes
   const period = formula.period ? +formula.period : 1;
-  const time = lastTime;
+  const time = new Date(lastTime);
   time.setMinutes(time.getMinutes() + period);
   // if (formula.endAt) {
   //   const endAt = new Date("1970T"+formula.endAt);
   // }
   
   // This assume we test it only on the same day it occurs
-  const endTime = lastTime;
-  endTime.setMinutes(formula.endAt ? new Date(formula.endAt).getMinutes() : new Date().getMinutes());
-  endTime.setHours(formula.endAt ? new Date(formula.endAt).getHours() : new Date().getHours());
+  const endTime = new Date(lastTime);
+  
+  if (formula.endAt) {
+    const end = Time.fromString(formula.endAt);
+    endTime.setHours(end.hours, end.minutes);
+  } else {
+    endTime.setHours(0, 0);
+    endTime.setDate(endTime.getDate()+1);
+  }
   
   let stringLeft = formula.formula;
 
   let count = false;
-  while (true) {
-    const [command, unread] = stringLeft.split(" ", 2);
-    console.log(command);
+  let updatedFormula: FormulaWithResults | null = null;
+  while (stringLeft) {
+    const splittedString = stringLeft.split(" ", 1);
+    const command = splittedString[0];
 
     switch (command) {
       case "num":
@@ -43,8 +101,9 @@ export async function compute(formula: FormulaWithResults) {
             && value.createat < time
           );
           const result = cars.length;
+          const creationTime = new Date(time);
 
-          await prisma.formula.update({
+          updatedFormula = await prisma.formula.update({
             where: {
               id: formula.id,
             },
@@ -53,7 +112,7 @@ export async function compute(formula: FormulaWithResults) {
                 create: {
                   result: result,
                   type: "number",
-                  createdAt: time,
+                  createdAt: creationTime,
                 }
               }
             },
@@ -62,19 +121,15 @@ export async function compute(formula: FormulaWithResults) {
             }
           });
           isFinished =
-            lastTime.getTime() + period*60000 > Date.now() ||
-            lastTime.getTime() + period*60000 > endTime.getTime();
+            lastTime.getTime() + period*60000 >= Date.now() ||
+            lastTime.getTime() + period*60000 >= endTime.getTime();
         }
         break;
       default:
         break;
     }
 
-    if (unread == "") {
-      break;
-    }
-    console.log(unread);
-    stringLeft = unread;
+    stringLeft = stringLeft.slice(command.length).trimStart();
   }
-  return isFinished;
+  return new Computation(isFinished, updatedFormula);
 }
