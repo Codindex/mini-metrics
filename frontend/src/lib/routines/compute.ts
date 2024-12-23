@@ -49,7 +49,7 @@ export async function compute(formula: FormulaWithResults) {
   endOfDay.setHours(end.hours, end.minutes, 0, 0);
   console.log("End: " + endOfDay);
   
-  const isTooLate = lastTime.getTime() > endOfDay.getTime();
+  const isTooLate = lastTime.getTime() >= endOfDay.getTime();
   console.log(isTooLate);
   if (isTooLate) {
     lastTime = new Date(
@@ -65,6 +65,9 @@ export async function compute(formula: FormulaWithResults) {
   const period = formula.period ? +formula.period : 1;
   const time = new Date(lastTime);
   time.setMinutes(time.getMinutes() + period);
+  if (time.getTime() >= Date.now()) {
+    return new Computation(true, formula);
+  }
   // if (formula.endAt) {
   //   const endAt = new Date("1970T"+formula.endAt);
   // }
@@ -121,8 +124,9 @@ export async function compute(formula: FormulaWithResults) {
             }
           });
           isFinished =
-            lastTime.getTime() + period*60000 >= Date.now() ||
-            lastTime.getTime() + period*60000 >= endTime.getTime();
+            creationTime.getTime() + period*60000 >= Date.now()
+            // lastTime.getTime() + period*60000 >= Date.now() ||
+            // lastTime.getTime() + period*60000 >= endTime.getTime();
         }
         break;
       default:
