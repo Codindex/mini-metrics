@@ -44,16 +44,24 @@ export default function FormulasPage() {
     
     const formulaWithResults = await getFormulaResults(formulaObj.id);
     if (formulaWithResults) {
-      const resultsSorted = formulaWithResults.results.sort((a, b) =>
+      const now = new Date(Date.now());
+      const filteredResults = formulaWithResults.results.filter((value) =>
+        value.createdAt.getDate() == now.getDate() &&
+        value.createdAt.getMonth() == now.getMonth() &&
+        value.createdAt.getFullYear() == now.getFullYear()
+      );
+
+      const resultsSorted = filteredResults.sort((a, b) =>
         a.createdAt.getTime() - b.createdAt.getTime()
       );
-      const beginTime = resultsSorted.length > 0 ? resultsSorted[0].createdAt : undefined;
-      const data = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
-        const result = JSON.parse(formulaWithResults.results[i].result!.toString()) as number;
+      const beginTime = resultsSorted.length > 0 ? new Date(resultsSorted[0].createdAt) : undefined;
+      beginTime?.setMinutes(beginTime.getMinutes() - (formulaObj.period ? +formulaObj.period : 1))
+      const data = Array.from({ length: resultsSorted.length }, (_, i) => {
+        const result = JSON.parse(resultsSorted[i].result!.toString()) as number;
         return result;
       });
-      const timeLabels = Array.from({ length: formulaWithResults.results.length }, (_, i) => {
-        const result = formulaWithResults.results[i].createdAt;
+      const timeLabels = Array.from({ length: resultsSorted.length }, (_, i) => {
+        const result = resultsSorted[i].createdAt;
         return Math.floor((result.getTime() - (beginTime ? beginTime.getTime() : 0))/(1000*60));
       });
 
