@@ -65,6 +65,7 @@ export async function compute(formula: FormulaWithResults) {
   const period = formula.period ? +formula.period : 1;
   const time = new Date(lastTime);
   time.setMinutes(time.getMinutes() + period);
+  // Verify if we try to get a "future" result
   if (time.getTime() >= Date.now()) {
     return new Computation(true, formula);
   }
