@@ -22,7 +22,6 @@ export async function getFormulaResults(formulaId: number) {
       finish = computation.finish;
       formulaWithResults = computation.formula;
 
-      formulaWithResults = await getFormulaResultsDTO(formulaId);
       if (formulaWithResults) console.log(formulaWithResults.results[formulaWithResults.results.length - 1]);
       console.log(finish);
     }
